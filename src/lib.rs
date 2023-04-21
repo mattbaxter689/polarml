@@ -96,6 +96,7 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
 
     println!("Saving model");
     //time to save the model, in case of future use
+    //Could add a check to see if a model is already saved, and leave it be if is
     let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
     File::create("src/model/lin_reg.model")
         .and_then(|mut f| f.write_all(&reg_bytes))
