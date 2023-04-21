@@ -15,6 +15,7 @@ pub fn read_csv(path: &str) -> PolarsResult<DataFrame> {
     CsvReader::from_path(path)?.has_header(true).finish()
 }
 
+// Give shape andtype for data in frame
 pub fn describe_df(df: &DataFrame) {
     println!("Dataframe shape:...");
     println!("{:?}", df.shape());
@@ -26,6 +27,7 @@ pub fn describe_df(df: &DataFrame) {
     println!("{:?}", df);
 }
 
+// Get the feature and target variables separate
 pub fn extract_feature_target(
     df: &DataFrame,
 ) -> (PolarsResult<DataFrame>, PolarsResult<DataFrame>) {
@@ -89,6 +91,9 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     //    LinearRegressionParameters::default
     //    .with_solver(LinearRegressionSolverName::SVD)).unwrap();
     //gives more control over the type of solver you want to use (SVD preferred for this)
+    //
+    //Don't forget to also get the regression coefficients and possible plots of the model.
+    // Could also look at comparing linfa with smartcore to see which is better.
 
     let pred = model.predict(&x_test).unwrap();
     let mse = mean_squared_error(&y_test, &pred);
