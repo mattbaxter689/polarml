@@ -6,3 +6,9 @@ build:
 
 describe:
 	cargo run -- describe
+
+check:
+	cargo check
+
+fix:
+	cargo fix
