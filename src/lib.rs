@@ -9,7 +9,7 @@ use smartcore::{
     model_selection::train_test_split,
 };
 use std::fs::File;
-use std::io::{Write, Read};
+use std::io::{Read, Write};
 
 pub fn read_csv(path: &str) -> PolarsResult<DataFrame> {
     CsvReader::from_path(path)?.has_header(true).finish()
@@ -117,5 +117,3 @@ pub fn investigate(path: String) {
     println!("Model Reloaded successfully!\n");
     println!("Model: {:?}", lr_model.coefficients());
 }
-
-
