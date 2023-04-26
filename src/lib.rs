@@ -9,7 +9,7 @@ use smartcore::{
     model_selection::train_test_split,
 };
 use std::fs::File;
-use std::io::Write;
+use std::io::{Write, Read};
 
 pub fn read_csv(path: &str) -> PolarsResult<DataFrame> {
     CsvReader::from_path(path)?.has_header(true).finish()
@@ -44,7 +44,7 @@ pub fn extract_feature_target(
 //TODO: I'm not too happy with this. Need to see if I can put this into array
 // when reading into rust, instead of dataframe. Or make 2 different processes,
 // one for description, and two for model building
-pub fn create_x_mat(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
+pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
     let nrows = x.height();
     let ncols = x.width();
     let x_array = x.to_ndarray::<Float64Type>().unwrap();
@@ -57,7 +57,6 @@ pub fn create_x_mat(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
 
     for val in x_array.iter() {
         // Debug
-        //println!("{},{}", usize::try_from(row).unwrap(), usize::try_from(col).unwrap());
         // define the row and col in the final matrix as usize
         let m_row = usize::try_from(row).unwrap();
         let m_col = usize::try_from(col).unwrap();
@@ -86,24 +85,37 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     //fit the model
     let model = LinearRegression::fit(&x_train, &y_train, Default::default()).unwrap();
     println!("Model built");
-    //alternatively
-    // LienarRegression::fit(&x_train, &y_train,
-    //    LinearRegressionParameters::default
-    //    .with_solver(LinearRegressionSolverName::SVD)).unwrap();
-    //gives more control over the type of solver you want to use (SVD preferred for this)
-    //
-    //Don't forget to also get the regression coefficients and possible plots of the model.
-    // Could also look at comparing linfa with smartcore to see which is better.
+
+    // Model Parameters
+    println!("Model Parameters: ");
+    println!("{:?}", model.coefficients());
+    println!("\n");
+    println!("Model Intercept: ");
+    println!("{:?}", model.intercept());
 
     let pred = model.predict(&x_test).unwrap();
     let mse = mean_squared_error(&y_test, &pred);
-    println!("MSE: {:?}", mse);
+    println!("\n MSE: {:?}", mse);
 
-    println!("Saving model");
-    //time to save the model, in case of future use
     //Could add a check to see if a model is already saved, and leave it be if is
+    println!("\nSaving model");
     let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
     File::create("src/model/lin_reg.model")
         .and_then(|mut f| f.write_all(&reg_bytes))
         .expect("Can not persist model");
 }
+
+pub fn investigate(path: String) {
+    let lr_model: LinearRegression<f64, f64, DenseMatrix<f64>, Vec<f64>> = {
+        let mut buf: Vec<u8> = Vec::new();
+        File::open(&path)
+            .and_then(|mut f| f.read_to_end(&mut buf))
+            .expect("Can not load model");
+        bincode::deserialize(&buf).expect("Can not deserialize the model")
+    };
+
+    println!("Model Reloaded successfully!\n");
+    println!("Model: {:?}", lr_model.coefficients());
+}
+
+

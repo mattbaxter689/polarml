@@ -1,11 +1,14 @@
 format:
 	cargo fmt
 
-build:
-	cargo run -- build
+fit:
+	cargo run -- fit 
 
 describe:
 	cargo run -- describe
+
+info:
+	cargo run -- info
 
 check:
 	cargo check

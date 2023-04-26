@@ -21,8 +21,12 @@ enum Commands {
         #[clap(long, default_value = CSV_FILE)]
         path: String,
     },
-    Build {
+    Fit {
         #[clap(long, default_value = CSV_FILE)]
+        path: String,
+    },
+    Info {
+        #[clap(long, default_value = "src/model/lin_reg.model")]
         path: String,
     },
 }
@@ -34,11 +38,11 @@ fn main() {
             let df = polarml::read_csv(&path).unwrap();
             polarml::describe_df(&df);
         }
-        Some(Commands::Build { path }) => {
+        Some(Commands::Fit { path }) => {
             let df = polarml::read_csv(&path).unwrap();
             let (x, y) = polarml::extract_feature_target(&df);
             let xs = x.unwrap();
-            let xdense = polarml::create_x_mat(&xs).unwrap();
+            let xdense = polarml::create_x_dense(&xs).unwrap();
 
             //set up y to be array
             let ydense = y.unwrap().to_ndarray::<Float64Type>().unwrap();
@@ -48,6 +52,9 @@ fn main() {
             }
 
             polarml::build_regression(xdense, target);
+        }
+        Some(Commands::Info { path }) => {
+            polarml::investigate(path);
         }
         None => {
             println!("No subcommand used");
