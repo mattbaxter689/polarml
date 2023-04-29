@@ -1,5 +1,4 @@
 use polars::prelude::*;
-use smartcore::linalg::basic::arrays::ArrayView2;
 use smartcore::metrics::mean_squared_error;
 use smartcore::{
     linalg::basic::{
@@ -9,7 +8,7 @@ use smartcore::{
     linear::linear_regression::LinearRegression,
     model_selection::train_test_split,
 };
-use core::fmt;
+
 use std::fs::File;
 use std::io::{Read, Write};
 
@@ -43,9 +42,6 @@ pub fn extract_feature_target(
     return (features, target);
 }
 
-//TODO: I'm not too happy with this. Need to see if I can put this into array
-// when reading into rust, instead of dataframe. Or make 2 different processes,
-// one for description, and two for model building
 pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
     let nrows = x.height();
     let ncols = x.width();
