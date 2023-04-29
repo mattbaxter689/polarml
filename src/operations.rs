@@ -1,4 +1,5 @@
 use polars::prelude::*;
+use smartcore::linalg::basic::arrays::ArrayView2;
 use smartcore::metrics::mean_squared_error;
 use smartcore::{
     linalg::basic::{
@@ -8,6 +9,7 @@ use smartcore::{
     linear::linear_regression::LinearRegression,
     model_selection::train_test_split,
 };
+use core::fmt;
 use std::fs::File;
 use std::io::{Read, Write};
 
@@ -86,13 +88,6 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     let model = LinearRegression::fit(&x_train, &y_train, Default::default()).unwrap();
     println!("Model built");
 
-    // Model Parameters
-    println!("Model Parameters: ");
-    println!("{:?}", model.coefficients());
-    println!("\n");
-    println!("Model Intercept: ");
-    println!("{:?}", model.intercept());
-
     let pred = model.predict(&x_test).unwrap();
     let mse = mean_squared_error(&y_test, &pred);
     println!("\n MSE: {:?}", mse);
@@ -114,6 +109,10 @@ pub fn investigate(path: String) {
         bincode::deserialize(&buf).expect("Can not deserialize the model")
     };
 
-    println!("Model Reloaded successfully!\n");
-    println!("Model: {:?}", lr_model.coefficients());
+    println!("\nModel Parameters: ");
+    println!("{:?}", lr_model.coefficients());
+    println!("\n");
+    println!("Model Intercept: ");
+    println!("{:?}", lr_model.intercept());
+
 }

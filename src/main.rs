@@ -1,6 +1,8 @@
 use clap::Parser;
 use polars::prelude::Float64Type;
 
+mod operations;
+
 const CSV_FILE: &str = "src/data/housing.csv";
 
 #[derive(Parser)]
@@ -35,14 +37,14 @@ fn main() {
     let args = Cli::parse();
     match args.command {
         Some(Commands::Describe { path }) => {
-            let df = polarml::read_csv(&path).unwrap();
-            polarml::describe_df(&df);
+            let df = operations::read_csv(&path).unwrap();
+            operations::describe_df(&df);
         }
         Some(Commands::Fit { path }) => {
-            let df = polarml::read_csv(&path).unwrap();
-            let (x, y) = polarml::extract_feature_target(&df);
+            let df = operations::read_csv(&path).unwrap();
+            let (x, y) = operations::extract_feature_target(&df);
             let xs = x.unwrap();
-            let xdense = polarml::create_x_dense(&xs).unwrap();
+            let xdense = operations::create_x_dense(&xs).unwrap();
 
             //set up y to be array
             let ydense = y.unwrap().to_ndarray::<Float64Type>().unwrap();
@@ -51,10 +53,10 @@ fn main() {
                 target.push(*val);
             }
 
-            polarml::build_regression(xdense, target);
+            operations::build_regression(xdense, target);
         }
         Some(Commands::Info { path }) => {
-            polarml::investigate(path);
+            operations::investigate(path);
         }
         None => {
             println!("No subcommand used");
