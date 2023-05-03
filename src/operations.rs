@@ -110,5 +110,4 @@ pub fn investigate(path: String) {
     println!("\n");
     println!("Model Intercept: ");
     println!("{:?}", lr_model.intercept());
-
 }
