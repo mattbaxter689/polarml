@@ -96,6 +96,7 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
         .expect("Can not persist model");
 }
 
+//Look into the model and its coefficients. Need to investigate if i can explore model more
 pub fn investigate(path: String) {
     let lr_model: LinearRegression<f64, f64, DenseMatrix<f64>, Vec<f64>> = {
         let mut buf: Vec<u8> = Vec::new();
