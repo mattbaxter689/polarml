@@ -2,6 +2,7 @@ use clap::Parser;
 use polars::prelude::Float64Type;
 
 mod operations;
+mod fileops;
 
 const CSV_FILE: &str = "src/data/housing.csv";
 
@@ -37,11 +38,11 @@ fn main() {
     let args = Cli::parse();
     match args.command {
         Some(Commands::Describe { path }) => {
-            let df = operations::read_csv(&path).unwrap();
+            let df = fileops::read_csv(&path).unwrap();
             operations::describe_df(&df);
         }
         Some(Commands::Fit { path }) => {
-            let df = operations::read_csv(&path).unwrap();
+            let df = fileops::read_csv(&path).unwrap();
             let (x, y) = operations::extract_feature_target(&df);
             let xs = x.unwrap();
             let xdense = operations::create_x_dense(&xs).unwrap();

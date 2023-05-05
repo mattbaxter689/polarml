@@ -1,3 +1,4 @@
+use crate::fileops::check_model_dir;
 use polars::prelude::*;
 use smartcore::metrics::mean_squared_error;
 use smartcore::{
@@ -11,10 +12,6 @@ use smartcore::{
 
 use std::fs::File;
 use std::io::{Read, Write};
-
-pub fn read_csv(path: &str) -> PolarsResult<DataFrame> {
-    CsvReader::from_path(path)?.has_header(true).finish()
-}
 
 // Give shape andtype for data in frame
 pub fn describe_df(df: &DataFrame) {
@@ -89,11 +86,14 @@ pub fn build_regression(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     println!("\n MSE: {:?}", mse);
 
     //Could add a check to see if a model is already saved, and leave it be if is
-    println!("\nSaving model");
-    let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
-    File::create("src/model/lin_reg.model")
-        .and_then(|mut f| f.write_all(&reg_bytes))
-        .expect("Can not persist model");
+    //add check for model dir here
+    if check_model_dir() {
+        println!("\nSaving model");
+        let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
+        File::create("src/model/lin_reg.model")
+            .and_then(|mut f| f.write_all(&reg_bytes))
+            .expect("Can not persist model");
+    }
 }
 
 //Look into the model and its coefficients. Need to investigate if i can explore model more
