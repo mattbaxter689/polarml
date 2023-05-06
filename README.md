@@ -8,6 +8,9 @@ better grasp on the language now, as well as some other libraries. Next steps wi
 in order to clean the data, which was not done here.
 
 ### Notes
-Need function to check if the model directory exists, if not create one. Store that in a new file that handles are directory and file operations (call it like file.rs or something)
 
-Implement a function to incorporate linfa and compare it to smartcore. This means that linfa and smartcore can be stored in a submodule in src or something
+- [] Need function to check for directory where models saved to
+- [x] Create New file to handle any file operation functions
+- [] Incorporate Linfa into the project to compare to smartcore
+    - [] Look to create subdirectory in src/ to handle smartcore and linfa files
+- [] move the model directory to project root folder 
