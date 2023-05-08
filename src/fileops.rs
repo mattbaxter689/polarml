@@ -7,7 +7,7 @@ pub fn read_csv(path: &str) -> PolarsResult<DataFrame> {
 }
 
 pub fn check_model_dir() -> bool {
-    if Path::new("src/model/").is_dir() {
+    if Path::new("model/").is_dir() {
         return true
     }
 

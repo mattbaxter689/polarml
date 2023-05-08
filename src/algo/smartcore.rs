@@ -1,4 +1,3 @@
-use crate::fileops::check_model_dir;
 use polars::prelude::*;
 use smartcore::metrics::mean_squared_error;
 use smartcore::{
@@ -13,31 +12,9 @@ use smartcore::{
 use std::fs::File;
 use std::io::{Read, Write};
 
+use crate::fileops::check_model_dir;
+
 // Give shape andtype for data in frame
-pub fn describe_df(df: &DataFrame) {
-    println!("Dataframe shape:...");
-    println!("{:?}", df.shape());
-
-    println!("\n Dataframe schema:...");
-    println!("{:?}", df.schema());
-
-    println!("\n Dataframe:...");
-    println!("{:?}", df);
-}
-
-// Get the feature and target variables separate
-pub fn extract_feature_target(
-    df: &DataFrame,
-) -> (PolarsResult<DataFrame>, PolarsResult<DataFrame>) {
-    let features = df.select(vec![
-        "crim", "zn", "indus", "chas", "nox", "rm", "age", "dis", "rad", "tax", "ptratio", "black",
-        "lstat",
-    ]);
-
-    let target = df.select(["medv"]);
-
-    return (features, target);
-}
 
 pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
     let nrows = x.height();
@@ -90,7 +67,7 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     if check_model_dir() {
         println!("\nSaving model");
         let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
-        File::create("src/model/lin_reg.model")
+        File::create("model/lin_reg.model")
             .and_then(|mut f| f.write_all(&reg_bytes))
             .expect("Can not persist model");
     }
@@ -98,6 +75,7 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
 
 //Look into the model and its coefficients. Need to investigate if i can explore model more
 pub fn investigate(path: String) {
+    // Maybe look into making this its own function? Like the part that reads in the model
     let lr_model: LinearRegression<f64, f64, DenseMatrix<f64>, Vec<f64>> = {
         let mut buf: Vec<u8> = Vec::new();
         File::open(&path)

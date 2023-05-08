@@ -9,8 +9,10 @@ in order to clean the data, which was not done here.
 
 ### Notes
 
-- [ ] Need function to check for directory where models saved to
+- [x] Need function to check for directory where models saved to
 - [x] Create New file to handle any file operation functions
 - [ ] Incorporate Linfa into the project to compare to smartcore
     - [ ] Look to create subdirectory in src/ to handle smartcore and linfa files
 - [ ] move the model directory to project root folder 
+- [ ] create function for reading in the saved models (DRY code)
+

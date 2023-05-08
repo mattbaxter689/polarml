@@ -39,13 +39,13 @@ fn main() {
     match args.command {
         Some(Commands::Describe { path }) => {
             let df = fileops::read_csv(&path).unwrap();
-            algo::operations::describe_df(&df);
+            algo::schema::describe_df(&df);
         }
         Some(Commands::Fit { path }) => {
             let df = fileops::read_csv(&path).unwrap();
-            let (x, y) = algo::operations::extract_feature_target(&df);
+            let (x, y) = algo::schema::extract_feature_target(&df);
             let xs = x.unwrap();
-            let xdense = algo::operations::create_x_dense(&xs).unwrap();
+            let xdense = algo::smartcore::create_x_dense(&xs).unwrap();
 
             //set up y to be array
             let ydense = y.unwrap().to_ndarray::<Float64Type>().unwrap();
@@ -54,10 +54,10 @@ fn main() {
                 target.push(*val);
             }
 
-            algo::operations::fit_smartcore(xdense, target);
+            algo::smartcore::fit_smartcore(xdense, target);
         }
         Some(Commands::Info { path }) => {
-            algo::operations::investigate(path);
+            algo::smartcore::investigate(path);
         }
         None => {
             println!("No subcommand used");
