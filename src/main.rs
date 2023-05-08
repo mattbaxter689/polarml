@@ -4,7 +4,7 @@ use polars::prelude::Float64Type;
 mod algo;
 mod fileops;
 
-const CSV_FILE: &str = "src/data/housing.csv";
+const CSV_FILE: &str = "data/housing.csv";
 
 #[derive(Parser)]
 #[clap(
@@ -29,7 +29,7 @@ enum Commands {
         path: String,
     },
     Info {
-        #[clap(long, default_value = "src/model/lin_reg.model")]
+        #[clap(long, default_value = "model/lin_reg.model")]
         path: String,
     },
 }
