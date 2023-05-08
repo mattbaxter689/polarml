@@ -1,7 +1,7 @@
 use clap::Parser;
 use polars::prelude::Float64Type;
 
-mod operations;
+mod algo;
 mod fileops;
 
 const CSV_FILE: &str = "src/data/housing.csv";
@@ -39,13 +39,13 @@ fn main() {
     match args.command {
         Some(Commands::Describe { path }) => {
             let df = fileops::read_csv(&path).unwrap();
-            operations::describe_df(&df);
+            algo::operations::describe_df(&df);
         }
         Some(Commands::Fit { path }) => {
             let df = fileops::read_csv(&path).unwrap();
-            let (x, y) = operations::extract_feature_target(&df);
+            let (x, y) = algo::operations::extract_feature_target(&df);
             let xs = x.unwrap();
-            let xdense = operations::create_x_dense(&xs).unwrap();
+            let xdense = algo::operations::create_x_dense(&xs).unwrap();
 
             //set up y to be array
             let ydense = y.unwrap().to_ndarray::<Float64Type>().unwrap();
@@ -54,10 +54,10 @@ fn main() {
                 target.push(*val);
             }
 
-            operations::build_regression(xdense, target);
+            algo::operations::fit_smartcore(xdense, target);
         }
         Some(Commands::Info { path }) => {
-            operations::investigate(path);
+            algo::operations::investigate(path);
         }
         None => {
             println!("No subcommand used");
