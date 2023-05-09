@@ -22,8 +22,7 @@ pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
     let x_array = x.to_ndarray::<Float64Type>().unwrap();
 
     let mut xmatrix: DenseMatrix<f64> = DenseMatrix::fill(nrows, ncols, 0.0);
-    // populate the matrix
-    // initialize row and column counters
+
     let mut col: u32 = 0;
     let mut row: u32 = 0;
 
@@ -32,8 +31,7 @@ pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
         // define the row and col in the final matrix as usize
         let m_row = usize::try_from(row).unwrap();
         let m_col = usize::try_from(col).unwrap();
-        // NB we are dereferencing the borrow with *val otherwise we would have a &val type, which is
-        // not what set wants
+
         xmatrix.set((m_row, m_col), *val);
         // check what we have to update
         if m_col == ncols - 1 {
@@ -60,8 +58,6 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
     let mse = mean_squared_error(&y_test, &pred);
     println!("\n MSE: {:?}", mse);
 
-    //Could add a check to see if a model is already saved, and leave it be if is
-    //add check for model dir here
     if check_model_dir() {
         println!("\nSaving model");
 
@@ -74,7 +70,7 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
 
 //Look into the model and its coefficients. Need to investigate if i can explore model more
 pub fn investigate(path: String) {
-    // Maybe look into making this its own function? Like the part that reads in the model
+
     let lr_model: LinearRegression<f64, f64, DenseMatrix<f64>, Vec<f64>> = {
         let mut buf: Vec<u8> = Vec::new();
         File::open(&path)
