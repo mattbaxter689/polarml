@@ -8,7 +8,6 @@ use smartcore::{
     linear::linear_regression::LinearRegression,
     model_selection::train_test_split,
 };
-
 use std::fs::File;
 use std::io::{Read, Write};
 
