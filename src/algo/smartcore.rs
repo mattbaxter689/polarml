@@ -61,7 +61,7 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
         println!("\nSaving model");
 
         let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
-        File::create("model/lin_reg.model")
+        File::create("model/smartcore_reg.model")
             .and_then(|mut f| f.write_all(&reg_bytes))
             .expect("Can not persist model");
     }

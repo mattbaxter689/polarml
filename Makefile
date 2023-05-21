@@ -1,8 +1,11 @@
 format:
 	cargo fmt
 
-fit:
-	cargo run -- fit 
+smartcore:
+	cargo run -- smart
+
+linfa: 
+	cargo run -- linfa
 
 describe:
 	cargo run -- describe

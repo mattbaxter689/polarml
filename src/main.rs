@@ -24,7 +24,11 @@ enum Commands {
         #[clap(long, default_value = CSV_FILE)]
         path: String,
     },
-    Fit {
+    Smart {
+        #[clap(long, default_value = CSV_FILE)]
+        path: String,
+    },
+    Linfa {
         #[clap(long, default_value = CSV_FILE)]
         path: String,
     },
@@ -41,20 +45,25 @@ fn main() {
             let df = fileops::read_csv(&path).unwrap();
             algo::schema::describe_df(&df);
         }
-        Some(Commands::Fit { path }) => {
+        Some(Commands::Smart { path }) => {
             let df = fileops::read_csv(&path).unwrap();
             let (x, y) = algo::schema::extract_feature_target(&df);
-            let xs = x.unwrap();
+            let xs = x.as_ref().unwrap();
             let xdense = algo::smartcore::create_x_dense(&xs).unwrap();
 
             //set up y to be array
-            let ydense = y.unwrap().to_ndarray::<Float64Type>().unwrap();
+            let ydense = y.as_ref().unwrap().to_ndarray::<Float64Type>().unwrap();
             let mut target: Vec<f64> = Vec::new();
             for val in ydense.iter() {
                 target.push(*val);
             }
 
             algo::smartcore::fit_smartcore(xdense, target);
+        }
+        Some(Commands::Linfa { path }) => {
+            let df = fileops::read_csv(&path).unwrap();
+
+            algo::linfa::fit_linfa(&df)
         }
         Some(Commands::Info { path }) => {
             algo::smartcore::investigate(path);
