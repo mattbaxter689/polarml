@@ -63,7 +63,7 @@ fn main() {
         Some(Commands::Linfa { path }) => {
             let df = fileops::read_csv(&path).unwrap();
 
-            algo::linfa::fit_linfa(&df)
+            algo::linfa::fit_linfa(&df);
         }
         Some(Commands::Info { path }) => {
             algo::smartcore::investigate(path);

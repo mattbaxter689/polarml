@@ -1,10 +1,11 @@
+use linfa::metrics::SingleTargetRegression;
 use linfa::prelude::*;
 use linfa_linear::LinearRegression;
-use polars::prelude::DataFrame;
 use polars::datatypes::Float64Type;
-use ndarray::s;
+use polars::prelude::DataFrame;
+use ndarray::{s, Array};
 use std::fs::File;
-use std::io::{Write};
+use std::io::Write;
 
 use crate::fileops::check_model_dir;
 
@@ -14,16 +15,26 @@ pub fn fit_linfa(frame: &DataFrame) {
     let (records, targets) = (
         nd_frame.slice(s![.., 0..13]).to_owned(),
         nd_frame.column(13).to_owned(),
-    ); 
+    );
 
-    let data = Dataset::new(records, targets);
-    println!("{:?}", data);
+    // let arr = ArrayView::from_shape(((506, 13).strides((1, 13))), &bind);
+    let mut arr = Array::zeros((0, records.ncols()));
+    for n in 0..records.nrows() {
+        arr.push_row(records.row(n)).unwrap();
+    }
 
-    let model = LinearRegression::default().fit(&data).unwrap();
+    let data = Dataset::new(arr, targets);
+
+    let (train, test) = data.split_with_ratio(0.9);
+    let model = LinearRegression::default().fit(&train).unwrap();
+
+    let pred = model.predict(&test);
+    let mse = pred.mean_squared_error(&test).unwrap();
+    println!("{:?}", mse);
 
     if check_model_dir() {
         println!("\nSaving model");
-    
+
         let reg_bytes = bincode::serialize(&model).expect("Issue serializing model");
         File::create("model/linfa_reg.model")
             .and_then(|mut f| f.write_all(&reg_bytes))

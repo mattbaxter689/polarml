@@ -47,7 +47,6 @@ pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
 //This function builds the regression model, so there shouldnt be a Need
 //to return anything, I can just print out the accuracy and things
 pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
-    
     let (x_train, x_test, y_train, y_test) = train_test_split(&xmat, &yvals, 0.2, true, Some(5));
 
     println!("Building the model");
@@ -69,7 +68,6 @@ pub fn fit_smartcore(xmat: DenseMatrix<f64>, yvals: Vec<f64>) {
 
 //Look into the model and its coefficients. Need to investigate if i can explore model more
 pub fn investigate(path: String) {
-
     let lr_model: LinearRegression<f64, f64, DenseMatrix<f64>, Vec<f64>> = {
         let mut buf: Vec<u8> = Vec::new();
         File::open(&path)
