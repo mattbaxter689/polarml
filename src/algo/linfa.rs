@@ -17,7 +17,6 @@ pub fn fit_linfa(frame: &DataFrame) {
         nd_frame.column(13).to_owned(),
     );
 
-    // let arr = ArrayView::from_shape(((506, 13).strides((1, 13))), &bind);
     let mut arr = Array::zeros((0, records.ncols()));
     for n in 0..records.nrows() {
         arr.push_row(records.row(n)).unwrap();
