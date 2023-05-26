@@ -10,6 +10,7 @@ use std::io::Write;
 use crate::fileops::check_model_dir;
 
 pub fn fit_linfa(frame: &DataFrame) {
+    //should i put this into its own function?
     let nd_frame = frame.to_ndarray::<Float64Type>().unwrap();
 
     let (records, targets) = (

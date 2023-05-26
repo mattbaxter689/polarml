@@ -11,8 +11,10 @@ in order to clean the data, which was not done here.
 
 - [x] Need function to check for directory where models saved to
 - [x] Create New file to handle any file operation functions
-- [ ] Incorporate Linfa into the project to compare to smartcore
-    - [ ] Look to create subdirectory in src/ to handle smartcore and linfa files
-- [ ] move the model directory to project root folder 
+- [x] Incorporate Linfa into the project to compare to smartcore
+    - [x] Look to create subdirectory in src/ to handle smartcore and linfa files
+- [x] move the model directory to project root folder 
 - [ ] create function for reading in the saved models (DRY code)
+- [ ] create function to read in linfa model for inference
+- [ ] get model infernce for both smartcore and linfa models and compare
 
