@@ -9,8 +9,9 @@ use std::io::Write;
 
 use crate::fileops::check_model_dir;
 
+//Take in an ndarray::Array2 and return a Dataset::new(). Very confusing with the result but yeah
 fn linfa_split(arr: Array2<f64>) -> Result<DatasetBase<ArrayBase<OwnedRepr<f64>, Dim<[usize; 2]>>, 
-   ArrayBase<OwnedRepr<f64>, Dim<[usize; 1]>>>, Error >{
+   ArrayBase<OwnedRepr<f64>, Dim<[usize; 1]>>>, Error>{
 
 
     let (records, targets) = (
@@ -28,8 +29,8 @@ fn linfa_split(arr: Array2<f64>) -> Result<DatasetBase<ArrayBase<OwnedRepr<f64>,
     Ok(data)
 }
 
+//fit linfa linear regression
 pub fn fit_linfa(frame: &DataFrame) {
-    //should i put this into its own function?
     let nd_frame = frame.to_ndarray::<Float64Type>().unwrap();
 
     let data  = linfa_split(nd_frame).unwrap();

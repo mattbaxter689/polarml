@@ -13,8 +13,7 @@ use std::io::{Read, Write};
 
 use crate::fileops::check_model_dir;
 
-// Give shape andtype for data in frame
-
+//create x dense that smartcore needs to fit model
 pub fn create_x_dense(x: &DataFrame) -> Result<DenseMatrix<f64>, PolarsError> {
     let nrows = x.height();
     let ncols = x.width();
