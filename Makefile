@@ -2,16 +2,19 @@ format:
 	cargo fmt
 
 smartcore:
-	cargo run -- smart
+	cargo run -q -- smart
 
 linfa: 
-	cargo run -- linfa
+	cargo run -q -- linfa
 
 describe:
-	cargo run -- describe
+	cargo run -q -- describe
 
 info:
-	cargo run -- info
+	cargo run -q -- info
+
+help:
+	cargo run -q -- -help
 
 check:
 	cargo check

@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use polars::prelude::Float64Type;
 
 mod algo;
@@ -7,33 +7,28 @@ mod fileops;
 const CSV_FILE: &str = "data/housing.csv";
 
 #[derive(Parser)]
-#[clap(
-    version = "1.0",
-    author = "Matt Baxter",
-    about = "A cli to help with clap and model building from command line"
-)]
-
 struct Cli {
     #[clap(subcommand)]
     command: Option<Commands>,
 }
 
-#[derive(Parser)]
+#[derive(Subcommand)]
 enum Commands {
     Describe {
-        #[clap(long, default_value = CSV_FILE)]
+        #[arg(short, long, default_value = CSV_FILE)]
         path: String,
     },
     Smart {
-        #[clap(long, default_value = CSV_FILE)]
+        #[arg(short, long, default_value = CSV_FILE)]
         path: String,
     },
     Linfa {
-        #[clap(long, default_value = CSV_FILE)]
+        #[arg(short, long, default_value = CSV_FILE)]
         path: String,
     },
+    // don't want default value here, since want user to specify model
     Info {
-        #[clap(long, default_value = "model/lin_reg.model")]
+        #[arg(short, long)]
         path: String,
     },
 }
