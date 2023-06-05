@@ -8,8 +8,13 @@ use smartcore::{
     linear::linear_regression::LinearRegression,
     model_selection::train_test_split,
 };
-use std::fs::File;
-use std::io::{Read, Write};
+use std::{
+    fs::File,
+    io::{
+        Read,
+        Write
+    }
+};
 
 use crate::fileops::check_model_dir;
 

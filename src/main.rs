@@ -6,13 +6,14 @@ mod fileops;
 
 const CSV_FILE: &str = "data/housing.csv";
 
-#[derive(Parser)]
-struct Cli {
+#[derive(Parser, Debug)]
+pub struct Cli {
     #[clap(subcommand)]
     command: Option<Commands>,
 }
 
-#[derive(Subcommand)]
+//change this to have a Model command, with subcommands for linfa and smartcore
+#[derive(Subcommand, Debug)]
 enum Commands {
     Describe {
         #[arg(short, long, default_value = CSV_FILE)]

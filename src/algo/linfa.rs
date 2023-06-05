@@ -1,11 +1,17 @@
-use linfa::metrics::SingleTargetRegression;
-use linfa::prelude::*;
+use linfa::{
+    metrics::SingleTargetRegression,
+    prelude::*
+};
+use polars::{
+    datatypes::Float64Type,
+    prelude::DataFrame
+};
+use std::{
+    fs::File,
+    io::Write
+};
 use linfa_linear::LinearRegression;
-use polars::datatypes::Float64Type;
-use polars::prelude::DataFrame;
 use ndarray::{s, Array, Array2, ArrayBase, OwnedRepr, Dim};
-use std::fs::File;
-use std::io::Write;
 
 use crate::fileops::check_model_dir;
 
